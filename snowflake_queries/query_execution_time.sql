@@ -49,7 +49,9 @@ CREATE OR REPLACE VIEW OPERATIONS.CLOUDZERO_TELEMETRY.QUERY_EXECUTION_TIME (
     SELECT
         element_name,
         query_hour as timestamp,
-        OBJECT_CONSTRUCT('custom:Snowflake Warehouse', ARRAY_CONSTRUCT(warehouse)) as filter,  -- Assumes we have a custom dimension named "Snowflake Warehouse"
+        OBJECT_CONSTRUCT(
+            'account', LOWER(CURRENT_ACCOUNT() || '.' || CURRENT_REGION()),
+            'custom:Snowflake Warehouse', ARRAY_CONSTRUCT(warehouse)) as filter,  -- Assumes we have a custom dimension named "Snowflake Warehouse"
         total_time as value
     FROM result
     WHERE element_name IS NOT NULL;
