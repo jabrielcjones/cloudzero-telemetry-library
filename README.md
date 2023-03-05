@@ -25,7 +25,7 @@ Make sure this is updated based on the sections included:
 
 ## Projects
 
-- **Snowflake Query Telemetry** --  Gathers telemtry from Snowflake's QUERY_HISTORY and uses it to break down warehouse cost based on metadata provided in embedded in the SQL text.
+- [Snowflake Query Telemetry](snowflake_queries) --  Gathers telemtry from Snowflake's QUERY_HISTORY and uses it to break down warehouse cost based on metadata provided in embedded in the SQL text.
 
 
 ## Contributing
