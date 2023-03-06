@@ -8,12 +8,13 @@ CREATE OR REPLACE VIEW OPERATIONS.CLOUDZERO_TELEMETRY.QUERY_EXECUTION_TIME (
 	VALUE
 ) AS
     WITH queries AS (
-        SELECT PARSE_JSON(REGEXP_SUBSTR(query_text, '/\\*QUERYDATA>(\\{.*\\})<QUERYDATA\\*/', 1, 1, 'e')) AS query_data,  -- Metadata embedded as JSON in the query
-               query_data:query_prop1::string as query_prop1,   -- These should be changed to whatever properties you chose to include in the metadata.
-               query_data:query_prop2::string as query_prop2,   -- For example: customer_id, job_id, operation, etc.
-               query_data:query_prop3::string as query_prop3,
-               query_data:query_prop4::string as query_prop4,
-               NVL(query_prop1, 'none') || '||' || NVL(query_prop2, 'none') || '||' || NVL(query_prop3, 'none') || '||' || NVL(query_prop4, 'none') as element_name, -- Use a delimiter not present in any of the property values
+        SELECT 
+               USER_NAME as query_prop1,
+               ROLE_NAME as query_prop2,
+               QUERY_TAG as query_prop3,
+               DATABASE_NAME as query_prop4,
+               SCHEMA_NAME as query_prop5,
+               NVL(query_prop1, 'none') || '||' || NVL(query_prop2, 'none') || '||' || NVL(query_prop3, 'none') || '||' || NVL(query_prop4, 'none' || '||' || NVL(query_prop5, 'none') as element_name, -- Use a delimiter not present in any of the property values
                CONVERT_TIMEZONE('UTC', end_time)::TIMESTAMP_NTZ AS adj_end_time,
                DATEADD('ms', -1 * execution_time, adj_end_time) AS adj_start_time,  -- Uses the execution time, not queuing, compilation, etc.
                LOWER(warehouse_name) AS warehouse
