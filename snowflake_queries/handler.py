@@ -56,7 +56,7 @@ def _send_telemetry_records(conn: TelemetryApiConnection, records: List[Telemetr
         },
         json={
             'records': [keymap(lambda k: k.replace('_', '-'), x) for x in serializable(records)]
-        })
+        }, timeout=60)
     if not response.ok:
         logger.error(f'Got {response.status_code} sending telemetry to {conn.url}')
         logger.error(response.text)
